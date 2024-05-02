@@ -13,7 +13,7 @@ The nodes are connected in the following way:
 ![perception](assets/perception.png)
 ![avatar](assets/avatar.png)
 
-For the drone assets please refer to sputnik/drone repository
-For the avatar assets please refer to audio2photoreal repository
-For the Pose3D Node please refer to instructions for PoseFormerV2
-For the RNN please send an email to the author of the repository
+- For the drone assets please refer to sputnik/drone repository
+- For the avatar assets please refer to audio2photoreal repository
+- For the Pose3D Node please refer to instructions for PoseFormerV2
+- For the RNN please send an email to the author of the repository
