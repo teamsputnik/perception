@@ -16,6 +16,8 @@ import interpolation_model.config as cfg
 from interpolation_model.Trainer import Model
 from interpolation_model.benchmark.utils.padder import InputPadder
 
+
+### Interpolation Node
 class InterpolationNode(Node):
     def __init__(self):
         super().__init__('interpolation_node')
@@ -53,14 +55,16 @@ class InterpolationNode(Node):
         self.n = 8 # Set your n value here
         print("Interpolator Initialized")
         
-
+    ### Callback function for image
     def image_callback(self, msg):
         print(int(msg.header.frame_id))
         img = self.bridge.imgmsg_to_cv2(msg)
         heapq.heappush(self.frames_queue,(int(msg.header.frame_id), img))
+        ## Process frames if there are enough frames
         if len(self.frames_queue) >= 2 and not self.processing:
             self.process_frames()
 
+    ### Function to process frames using the queue.
     def process_frames(self):
         self.processing = True
 

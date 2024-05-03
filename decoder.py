@@ -16,7 +16,7 @@ from cv_bridge import CvBridge, CvBridgeError
 from sensor_msgs.msg import Image
 from sputnik_msgs.msg import Float64MultiArrayStamped
 
-
+### Decoder Node
 class DecoderNode(Node):
     def __init__(self):
         super().__init__('decoder_node')
@@ -39,6 +39,7 @@ class DecoderNode(Node):
         self.data_dict = load_local_data(self.data_root, audio_per_frame=1600)
         self.device = 'cuda1'
 
+    ### Callback function for with LBS keypoints
     def listener_callback(self, msg):
         data_pred = np.array(msg.data)
         frame_number = msg.header.frame_id

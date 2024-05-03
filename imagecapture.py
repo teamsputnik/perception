@@ -6,11 +6,13 @@ from cv_bridge import CvBridge, CvBridgeError
 import cv2
 import numpy as np
 
+### Image Capture Node
 class ImageCaptureNode(Node):
     def __init__(self):
         super().__init__('image_capture_node')
         self.publisher_pose2D = self.create_publisher(Image, '/capture_image', 10)
         self.bridge = CvBridge()
+        ### Video Capture using HDMI capture card and Remote Controller
         self.cap = cv2.VideoCapture("/dev/v4l/by-id/usb-UltraSemi_USB3_Video_20210623-video-index0")
         # self.cap = cv2.VideoCapture("/home/share/audio2photoreal/saksham2.mp4")
         #self.cap = cv2.VideoCapture("/home/share/audio2photoreal/annanya.avi")
@@ -19,7 +21,8 @@ class ImageCaptureNode(Node):
         self.saved = False
         self.frame_count = 0
         self.timer = self.create_timer(1/32, self.timer_callback)  # Adjust timer as needed
-
+        
+    ###Callback function with Timer to add frame number along with the image
     def timer_callback(self):
         ret, frame = self.cap.read()
         if not ret:

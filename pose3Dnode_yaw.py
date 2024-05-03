@@ -23,6 +23,7 @@ sys.path.append("/home/share/audio2photoreal/PoseFormerV2/demo")
 
 from PoseFormerV2.demo.vis import Pose2DEstimator, Pose3DEstimator, get_pose2D
 
+### Visualization Configuration
 VISUALIZATION_CFG = dict(
     coco=dict(
         skeleton=[(15, 13), (13, 11), (16, 14), (14, 12), (11, 12), (5, 11),
@@ -88,6 +89,7 @@ VISUALIZATION_CFG = dict(
             0.021, 0.021, 0.032, 0.02, 0.019, 0.022, 0.031
         ]))
 
+### Class for 3D Pose Estimation
 class Pose3DNode(Node):
     def __init__(self):
         super().__init__('lbs_node')
@@ -112,7 +114,7 @@ class Pose3DNode(Node):
         self.pose2d_model = Pose2DEstimator("cuda:0")
         self.pose3d_model = Pose3DEstimator("cuda:0")
 
-
+    ### Reads and Concatenates the LBS files
     def ConcatFiles(self):
         concat_vector = []
         folder_path = "/home/share/audio2photoreal/output/dataset/lbs_gt"
@@ -125,7 +127,7 @@ class Pose3DNode(Node):
         concat_vector = np.array(concat_vector).squeeze(2)
         return concat_vector
 
-
+    ### Publishes the 3D pose to the topic
     def pose_publisher(self,poses,frame_number):
         msg = Float64MultiArrayStamped()
         if (np.shape(poses)[0]==0):
@@ -135,6 +137,7 @@ class Pose3DNode(Node):
             msg.header.frame_id = str(frame_number)
             self.keypoints_pub.publish(msg)
 
+    ### Publishes the 2D pose to the topic
     def position_publisher(self,positions,image_size,frame_number):
         msg = Float64MultiArray()
         if (np.shape(positions)[0]==0):
@@ -143,7 +146,7 @@ class Pose3DNode(Node):
             msg.data = positions.flatten().tolist()
             msg.data.extend(image_size)
             self.position_pub.publish(msg)
-
+    ### Callback function for the image topic
     def image_callback(self, msg):
         try:
             frame = self.bridge.imgmsg_to_cv2(msg, desired_encoding='bgr8')
@@ -159,12 +162,11 @@ class Pose3DNode(Node):
                 self.position_publisher(keypoints,frame.shape,frame_number)
                 self.pose_publisher(self.pred_lbs_points,frame_number)
 
-
         except Exception as e:
             self.get_logger().error(f"Error processing image: {str(e)}")
 
 
-
+    ### Function to get the LBS points given frame, by first predicting the 3D pose.
     def getLBSPoints(self, frame):
         input_tensor = torch.tensor(frame)
         selected_data = input_tensor
@@ -181,6 +183,7 @@ class Pose3DNode(Node):
         # self.get_logger().info("-------------LBS CALCULATED-----------")    
         return pred_output
 
+    ### Function to visualize the 2D pose.
     def visualize(self, frame, results, thr=0.5, resize=1280, skeleton_type='coco'):
         skeleton = VISUALIZATION_CFG[skeleton_type]['skeleton']
         palette = VISUALIZATION_CFG[skeleton_type]['palette']
