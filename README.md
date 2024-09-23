@@ -6,7 +6,7 @@ Each of the nodes have their own tasks to perform, and they are as follows:
 2. Pose3D - Decodes the pose from the image and publishes the decoded pose and the lbs_motion parameters
 3. Decoder - Decodes the lbs_motion parameters and publishes the textured image
 4. Interpolator - Interpolates the images to improve the framerate
-5. The currentv code for VR headset visualization(Not Finished) is contained in vr_codes. receive_pose.py stream the poses of both eyes 
+5. The current scripts for VR headset visualization(Not Finished) is contained in vr_codes. receive_pose.py stream the poses of both eyes 
 from the headset to the desktop. stream_image.py stream the renderered left/right eye images to the headset.
 The nodes are connected in the following way:
 
